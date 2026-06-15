@@ -1,6 +1,16 @@
 
+const sasso = document.querySelector("#sasso");
+const carta = document.querySelector("#carta");
+const forbici = document.querySelector("#forbici");
+const risultatoRound = document.querySelector("#risultatoRound");
+const storico = document.querySelector("#storico");
+const risultatoFinale = document.querySelector("#risultatoFinale");
+const reset = document.querySelector("#reset");
+
+
 let humanScore = 0;
 let computerScore = 0;
+let round = 1;
 
 function getRandom() {
   return Math.random();
@@ -19,46 +29,96 @@ function getComputerChoice() {
   return computer;
 }
 
-function getHumanChoice() {
-  let choice = prompt("Rock, paper or scissors?","");
-  let human = choice.toLowerCase();
-  return human;
-}
+sasso.addEventListener("click", () => {
+    playRound("rock");
+  
+})
 
-function playRound() {
-  const computerChoice = getComputerChoice();
-  const humanChoice = getHumanChoice();
-  if (computerChoice === "rock" && humanChoice === "scissors"
-    || computerChoice === "paper" && humanChoice == "rock"
-    || computerChoice === "scissors" && humanChoice == "paper") {
-      computerScore++;
-      alert("Computer win this round!");
-    }
-  if (computerChoice === "rock" && humanChoice === "paper"
-    || computerChoice === "paper" && humanChoice === "scissors"
-    || computerChoice === "scissors" && humanChoice === "rock") {
-      humanScore++;
-      alert("You win this round!");
-    }
-  if (computerChoice === "rock" && humanChoice === "rock"
-    || computerChoice === "paper" && humanChoice === "paper"
-    || computerChoice === "scissors" && humanChoice === "scissors") {
-      alert("Draw!");
-    }
-  console.log(`Computer: ${computerScore}, You: ${humanScore}`)
-}
+carta.addEventListener("click", () => {
+    playRound("paper");
+})
 
-function playGame() {
-  for (let i=0; i<5; i++) {
-    playRound();
-  }
-  if (humanScore > computerScore) {
-    alert("You Win the Game!");
-  } else if (humanScore < computerScore) {
-    alert("You Lost the Game!");
+forbici.addEventListener("click", () => {
+    playRound("scissors");
+})
+
+reset.addEventListener("click", () => {
+  humanScore = 0;
+  computerScore = 0;
+  round = 1;
+  sasso.disabled = false;
+  forbici.disabled = false;
+  carta.disabled = false;
+  storico.innerHTML = "Risultati:";
+  risultatoRound.textContent = "";
+  risultatoFinale.textContent = "";
+})
+
+function finePartita() {
+  sasso.disabled = true;
+  carta.disabled = true;
+  forbici.disabled = true;
+  if (computerScore === 5) {
+    risultatoFinale.textContent = "Il computer ha vinto! Ritenta, sarai più fortunato!"
   } else {
-    alert("You Draw the Game!");
+    risultatoFinale.textContent = "Congratulazioni hai vinto!"
   }
 }
 
-playGame();
+
+function playRound(scelta) {
+  const computerChoice = getComputerChoice();
+  if (computerChoice === "rock" && scelta === "scissors"
+    || computerChoice === "paper" && scelta === "rock"
+    || computerChoice === "scissors" && scelta === "paper") {
+      computerScore++;
+      roundPerso();
+  
+    }
+  if (computerChoice === "rock" && scelta === "paper"
+    || computerChoice === "paper" && scelta === "scissors"
+    || computerChoice === "scissors" && scelta === "rock") {
+    humanScore++;
+    roundVinto();
+  }
+  if (computerChoice === "rock" && scelta === "rock"
+    || computerChoice === "paper" && scelta === "paper"
+    || computerChoice === "scissors" && scelta === "scissors") {
+      roundPareggiato();
+    }
+  if (computerScore === 5 || humanScore === 5) {
+    finePartita();
+  }
+  }
+      
+function roundPerso() {
+  risultatoRound.textContent = "Il computer ha vinto questo Round!";
+  const li = document.createElement("li");
+  storico.appendChild(li);
+  li.textContent = `Round ${round}: Computer: ${computerScore}, Tu: ${humanScore}`;
+  round++;
+}
+
+function roundVinto() {
+  risultatoRound.textContent = "Hai vinto questo Round!";
+  const li = document.createElement("li");
+  storico.appendChild(li);
+  li.textContent = `Round ${round}: Computer: ${computerScore}, Tu: ${humanScore}`;
+  round++;
+}
+
+function roundPareggiato() {
+  risultatoRound.textContent = "Hai pareggiato questo Round!";
+  const li = document.createElement("li");
+  storico.appendChild(li);
+  li.textContent = `Round ${round}: Computer: ${computerScore}, Tu: ${humanScore}`;
+  round++;
+}
+
+
+      
+      
+      
+      
+      
+      
